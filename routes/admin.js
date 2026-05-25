@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Middleware xác thực quyền Admin bảo mật
+// middleware xac thuc admin
 function isAdmin(req, res, next) {
     if (req.session && req.session.user && Number(req.session.user.ROLE_ID || req.session.user.role_id) === 1) {
         return next();
@@ -11,9 +11,7 @@ function isAdmin(req, res, next) {
 }
 router.use(isAdmin);
 
-// ==========================================
-// THỐNG KÊ DOANH THU
-// ==========================================
+//thong ke doanh thu
 router.get('/dashboard', async (req, res) => {
     try {
         const [today] = await db.query("SELECT IFNULL(SUM(TONG_TIEN), 0) AS total FROM DON_HANG WHERE DATE(CREATED_AT) = CURDATE() AND TRANG_THAI = 'Hoàn thành'");
@@ -26,11 +24,9 @@ router.get('/dashboard', async (req, res) => {
     } catch (err) { res.status(500).send("Lỗi: " + err.message); }
 });
 
-// ==========================================
-// QUẢN LÝ SẢN PHẨM (CRUD)
-// ==========================================
+//qly san pham
 
-// GET PRODUCTS
+// product
 router.get('/products', async (req, res) => {
     try {
 
@@ -50,7 +46,7 @@ router.get('/products', async (req, res) => {
     }
 });
 
-// ADD PRODUCT
+// them
 router.post('/products/add', async (req, res) => {
 
     try {
@@ -102,7 +98,7 @@ router.post('/products/add', async (req, res) => {
 
 });
 
-// EDIT PRODUCT
+// sua
 router.post('/products/edit/:id', async (req, res) => {
 
     try {
@@ -154,7 +150,7 @@ router.post('/products/edit/:id', async (req, res) => {
 
 });
 
-// DELETE PRODUCT
+// xoa
 router.post('/products/delete/:id', async (req, res) => {
 
     try {
@@ -173,7 +169,7 @@ router.post('/products/delete/:id', async (req, res) => {
     }
 
 });
-// Route Thêm
+// router them
 router.post('/products/add', async (req, res) => {
     try {
         // Thêm category vào đây
@@ -184,7 +180,7 @@ router.post('/products/add', async (req, res) => {
     } catch (err) { res.status(500).send(err.message); }
 });
 
-// Route Sửa
+// router sua
 router.post('/products/edit/:id', async (req, res) => {
     try {
         const { product_name, price, image, category } = req.body;
@@ -193,9 +189,7 @@ router.post('/products/edit/:id', async (req, res) => {
         res.redirect('/admin/products');
     } catch (err) { res.status(500).send(err.message); }
 });
-// ==========================================
-// QUẢN LÝ TÀI KHOẢN (READ & DELETE)
-// ==========================================
+//qly tai khoan
 router.get('/users', async (req, res) => {
     try {
         const [users] = await db.query("SELECT * FROM NGUOI_SU_DUNG ORDER BY ID DESC");
@@ -205,7 +199,7 @@ router.get('/users', async (req, res) => {
 
 router.post('/users/delete/:id', async (req, res) => {
     try {
-        // Bảo vệ không cho phép admin tự xóa chính mình dựa vào session hiện tại
+        // giup bao ve admin ko tu xoa tai khoan cua chinh minh
         const currentAdminId = req.session.user.ID || req.session.user.id;
         if (Number(req.params.id) === Number(currentAdminId)) {
             return res.status(400).send("Bạn không thể tự xóa tài khoản Admin của chính mình!");
@@ -215,9 +209,7 @@ router.post('/users/delete/:id', async (req, res) => {
     } catch (err) { res.status(500).send(err.message); }
 });
 
-// ==========================================
-// QUẢN LÝ ĐƠN HÀNG
-// ==========================================
+//qly don hang
 router.get('/orders', async (req, res) => {
     try {
         const [orders] = await db.query("SELECT * FROM DON_HANG ORDER BY CREATED_AT DESC");
@@ -232,9 +224,7 @@ router.post('/orders/update-status/:id', async (req, res) => {
     } catch (err) { res.status(500).send(err.message); }
 });
 
-// ==========================================
-// QUẢN LÝ BÀI VIẾT (CRUD)
-// ==========================================
+//qly bai viet
 router.get('/posts', async (req, res) => {
     try {
         const [posts] = await db.query("SELECT * FROM BAI_VIET ORDER BY ID DESC");

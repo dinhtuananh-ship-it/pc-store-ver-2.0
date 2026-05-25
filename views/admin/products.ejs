@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Sản Phẩm - PC STORE</title>
 
-    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- ICON -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
@@ -17,8 +14,6 @@
 <body class="bg-light">
 
 <div class="d-flex">
-
-    <!-- SIDEBAR -->
     <div class="bg-dark text-white p-3 d-flex flex-column justify-content-between"
          style="min-width:260px; max-width:260px; min-height:100vh;">
 
@@ -91,10 +86,7 @@
 
     </div>
 
-    <!-- CONTENT -->
     <div class="flex-grow-1 p-4">
-
-        <!-- HEADER -->
         <div class="d-flex justify-content-between align-items-center mb-4">
 
             <h3 class="fw-bold text-dark">
@@ -115,7 +107,7 @@
 
         </div>
 
-        <!-- TABLE -->
+        <!-- bang -->
         <div class="card border-0 shadow-sm rounded-3">
 
             <div class="card-body p-0">
@@ -146,12 +138,12 @@
 
                         <tr>
 
-                            <!-- ID -->
+                            <!-- id -->
                             <td class="ps-3">
                                 #<%= pId %>
                             </td>
 
-                            <!-- IMAGE -->
+                            <!--anh -->
                             <td>
 
                                 <img
@@ -163,14 +155,14 @@
 
                             </td>
 
-                            <!-- NAME -->
+                            <!-- ten -->
                             <td class="fw-bold">
 
                                 <%= p.PRODUCT_NAME || p.product_name %>
 
                             </td>
 
-                            <!-- BRAND -->
+                            <!-- hang -->
                             <td>
 
                                 <span class="badge bg-dark">
@@ -181,7 +173,7 @@
 
                             </td>
 
-                            <!-- STOCK -->
+                            <!-- so luong trong kho -->
                             <td>
 
                                 <span class="badge bg-success">
@@ -192,17 +184,17 @@
 
                             </td>
 
-                            <!-- PRICE -->
+                            <!-- gia -->
                             <td class="text-danger fw-bold">
 
                                 <%= (p.PRICE || p.price).toLocaleString('vi-VN') %> đ
 
                             </td>
 
-                            <!-- ACTION -->
+                            <!-- action -->
                             <td class="text-center">
 
-                                <!-- EDIT -->
+                                <!-- edit -->
                                 <button
                                     class="btn btn-sm btn-warning fw-bold me-1"
                                     data-bs-toggle="modal"
@@ -213,7 +205,7 @@
 
                                 </button>
 
-                                <!-- DELETE -->
+                                <!-- xoa -->
                                 <form
                                     action="/admin/products/delete/<%= pId %>"
                                     method="POST"
@@ -244,7 +236,7 @@
 
         </div>
 
-        <!-- EDIT MODALS -->
+        <!-- edit modal -->
         <% products.forEach(p => { %>
 
             <% let pId = p.ID || p.id; %>
@@ -261,7 +253,7 @@
                         method="POST"
                         class="modal-content">
 
-                        <!-- HEADER -->
+                        <!-- header -->
                         <div class="modal-header bg-warning">
 
                             <h5 class="modal-title fw-bold">
@@ -279,10 +271,10 @@
 
                         </div>
 
-                        <!-- BODY -->
+                        <!-- body -->
                         <div class="modal-body">
 
-                            <!-- NAME -->
+                            <!-- ten -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -298,7 +290,7 @@
 
                             </div>
 
-                            <!-- PRICE -->
+                            <!-- gia -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -314,7 +306,7 @@
 
                             </div>
 
-                            <!-- IMAGE -->
+                            <!-- anh -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -330,7 +322,7 @@
 
                             </div>
 
-                            <!-- BRAND -->
+                            <!-- hang -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -346,7 +338,7 @@
 
                             </div>
 
-                            <!-- STOCK -->
+                            <!-- so luong trong kho -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -362,7 +354,7 @@
 
                             </div>
 
-                            <!-- DESCRIPTION -->
+                            <!-- mo ta -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -377,7 +369,7 @@
 
                             </div>
 
-                            <!-- CATEGORY -->
+                            <!-- danh muc -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-bold">
@@ -416,7 +408,7 @@
 
                         </div>
 
-                        <!-- FOOTER -->
+                        <!-- footer-->
                         <div class="modal-footer">
 
                             <button
@@ -451,7 +443,7 @@
 
 </div>
 
-<!-- ADD PRODUCT MODAL -->
+<!-- add modal san pham -->
 <div class="modal fade"
      id="addProductModal"
      tabindex="-1"
@@ -482,10 +474,10 @@
 
             </div>
 
-            <!-- BODY -->
+            <!-- body-->
             <div class="modal-body">
 
-                <!-- NAME -->
+                <!-- ten -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -501,7 +493,7 @@
 
                 </div>
 
-                <!-- PRICE -->
+                <!-- gia -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -517,7 +509,7 @@
 
                 </div>
 
-                <!-- IMAGE -->
+                <!-- anh -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -533,7 +525,7 @@
 
                 </div>
 
-                <!-- BRAND -->
+                <!-- hang -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -549,7 +541,7 @@
 
                 </div>
 
-                <!-- STOCK -->
+                <!-- so luong trong kho -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -565,7 +557,7 @@
 
                 </div>
 
-                <!-- DESCRIPTION -->
+                <!-- mo ta -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -581,7 +573,7 @@
 
                 </div>
 
-                <!-- CATEGORY -->
+                <!-- danh muc -->
                 <div class="mb-3">
 
                     <label class="form-label fw-bold">
@@ -615,7 +607,7 @@
 
             </div>
 
-            <!-- FOOTER -->
+            <!-- footer -->
             <div class="modal-footer">
 
                 <button
@@ -644,7 +636,6 @@
 
 </div>
 
-<!-- BOOTSTRAP -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
