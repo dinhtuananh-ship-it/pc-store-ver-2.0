@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sản Phẩm - PC STORE</title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ICON -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">
+
+<div class="d-flex">
+
+    <!-- SIDEBAR -->
+    <div class="bg-dark text-white p-3 d-flex flex-column justify-content-between"
+         style="min-width:260px; max-width:260px; min-height:100vh;">
+
+        <div>
+
+            <h4 class="text-warning fw-bold text-center my-3">
+                <i class="bi bi-cpu-fill"></i>
+                PC STORE ADMIN
+            </h4>
+
+            <hr class="border-secondary">
+
+            <ul class="nav nav-pills flex-column gap-2">
+
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link text-white">
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        Thống kê doanh thu
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/admin/products"
+                       class="nav-link text-white active bg-primary">
+
+                        <i class="bi bi-box-seam me-2"></i>
+                        Quản lý sản phẩm
+
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/admin/users" class="nav-link text-white">
+                        <i class="bi bi-people me-2"></i>
+                        Quản lý tài khoản
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/admin/orders" class="nav-link text-white">
+                        <i class="bi bi-cart3 me-2"></i>
+                        Quản lý đơn hàng
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/admin/posts" class="nav-link text-white">
+                        <i class="bi bi-newspaper me-2"></i>
+                        Quản lý bài viết
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div>
+
+            <hr class="border-secondary">
+
+            <a href="/logout"
+               class="btn btn-danger w-100 fw-bold py-2">
+
+                <i class="bi bi-box-arrow-right"></i>
+                Đăng xuất
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="flex-grow-1 p-4">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h3 class="fw-bold text-dark">
+
+                <i class="bi bi-box-seam text-primary"></i>
+                Kho Hàng Sản Phẩm
+
+            </h3>
+
+            <button class="btn btn-success fw-bold"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addProductModal">
+
+                <i class="bi bi-plus-circle-fill"></i>
+                Thêm sản phẩm mới
+
+            </button>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="card border-0 shadow-sm rounded-3">
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+
+                    <tr>
+
+                        <th class="ps-3">Mã</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Hãng</th>
+                        <th>Tồn kho</th>
+                        <th>Đơn giá</th>
+                        <th class="text-center">Hành động</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <% products.forEach(p => { %>
+
+                        <% let pId = p.ID || p.id; %>
+
+                        <tr>
+
+                            <!-- ID -->
+                            <td class="ps-3">
+                                #<%= pId %>
+                            </td>
+
+                            <!-- IMAGE -->
+                            <td>
+
+                                <img
+                                    src="<%= p.IMAGE || p.image %>"
+                                    width="60"
+                                    height="60"
+                                    class="rounded shadow-sm"
+                                    style="object-fit:cover;">
+
+                            </td>
+
+                            <!-- NAME -->
+                            <td class="fw-bold">
+
+                                <%= p.PRODUCT_NAME || p.product_name %>
+
+                            </td>
+
+                            <!-- BRAND -->
+                            <td>
+
+                                <span class="badge bg-dark">
+
+                                    <%= p.BRAND || p.brand %>
+
+                                </span>
+
+                            </td>
+
+                            <!-- STOCK -->
+                            <td>
+
+                                <span class="badge bg-success">
+
+                                    <%= p.STOCK || p.stock %>
+
+                                </span>
+
+                            </td>
+
+                            <!-- PRICE -->
+                            <td class="text-danger fw-bold">
+
+                                <%= (p.PRICE || p.price).toLocaleString('vi-VN') %> đ
+
+                            </td>
+
+                            <!-- ACTION -->
+                            <td class="text-center">
+
+                                <!-- EDIT -->
+                                <button
+                                    class="btn btn-sm btn-warning fw-bold me-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal<%= pId %>">
+
+                                    <i class="bi bi-pencil-square"></i>
+                                    Sửa
+
+                                </button>
+
+                                <!-- DELETE -->
+                                <form
+                                    action="/admin/products/delete/<%= pId %>"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?');">
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger fw-bold">
+
+                                        <i class="bi bi-trash3-fill"></i>
+                                        Xóa
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    <% }) %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- EDIT MODALS -->
+        <% products.forEach(p => { %>
+
+            <% let pId = p.ID || p.id; %>
+
+            <div class="modal fade"
+                 id="editModal<%= pId %>"
+                 tabindex="-1"
+                 aria-hidden="true">
+
+                <div class="modal-dialog modal-lg">
+
+                    <form
+                        action="/admin/products/edit/<%= pId %>"
+                        method="POST"
+                        class="modal-content">
+
+                        <!-- HEADER -->
+                        <div class="modal-header bg-warning">
+
+                            <h5 class="modal-title fw-bold">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Sửa sản phẩm #<%= pId %>
+
+                            </h5>
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                            </button>
+
+                        </div>
+
+                        <!-- BODY -->
+                        <div class="modal-body">
+
+                            <!-- NAME -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Tên sản phẩm
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    value="<%= p.PRODUCT_NAME || p.product_name %>"
+                                    required>
+
+                            </div>
+
+                            <!-- PRICE -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Giá bán
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="price"
+                                    class="form-control"
+                                    value="<%= p.PRICE || p.price %>"
+                                    required>
+
+                            </div>
+
+                            <!-- IMAGE -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Đường dẫn hình ảnh
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="image"
+                                    class="form-control"
+                                    value="<%= p.IMAGE || p.image %>"
+                                    required>
+
+                            </div>
+
+                            <!-- BRAND -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Hãng sản xuất
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="brand"
+                                    class="form-control"
+                                    value="<%= p.BRAND || p.brand %>"
+                                    required>
+
+                            </div>
+
+                            <!-- STOCK -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Số lượng trong kho
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="stock"
+                                    class="form-control"
+                                    value="<%= p.STOCK || p.stock %>"
+                                    required>
+
+                            </div>
+
+                            <!-- DESCRIPTION -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Mô tả sản phẩm
+                                </label>
+
+                                <textarea
+                                    name="description"
+                                    class="form-control"
+                                    rows="5"
+                                    required><%= p.DESCRIPTION || p.description %></textarea>
+
+                            </div>
+
+                            <!-- CATEGORY -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Danh mục
+                                </label>
+
+                                <select
+                                    name="category_id"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="1"
+                                        <%= (p.CATEGORY_ID || p.category_id) == 1 ? 'selected' : '' %>>
+
+                                        Laptop Gaming & Văn Phòng
+
+                                    </option>
+
+                                    <option value="2"
+                                        <%= (p.CATEGORY_ID || p.category_id) == 2 ? 'selected' : '' %>>
+
+                                        Linh Kiện PC (VGA, CPU, RAM)
+
+                                    </option>
+
+                                    <option value="3"
+                                        <%= (p.CATEGORY_ID || p.category_id) == 3 ? 'selected' : '' %>>
+
+                                        Phụ Kiện Chuột, Bàn Phím
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div class="modal-footer">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+
+                                Đóng
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary fw-bold">
+
+                                <i class="bi bi-check-circle-fill"></i>
+                                Lưu thay đổi
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal fade"
+     id="addProductModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <form
+            action="/admin/products/add"
+            method="POST"
+            class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header bg-success text-white">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="bi bi-plus-circle"></i>
+                    Thêm Sản Phẩm Mới
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <!-- NAME -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Tên sản phẩm
+                    </label>
+
+                    <input
+                        type="text"
+                        name="product_name"
+                        class="form-control"
+                        placeholder="Nhập tên sản phẩm"
+                        required>
+
+                </div>
+
+                <!-- PRICE -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Giá bán
+                    </label>
+
+                    <input
+                        type="number"
+                        name="price"
+                        class="form-control"
+                        placeholder="Ví dụ: 15000000"
+                        required>
+
+                </div>
+
+                <!-- IMAGE -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Đường dẫn hình ảnh
+                    </label>
+
+                    <input
+                        type="text"
+                        name="image"
+                        class="form-control"
+                        placeholder="/images/rtx4060.jpg"
+                        required>
+
+                </div>
+
+                <!-- BRAND -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Hãng sản xuất
+                    </label>
+
+                    <input
+                        type="text"
+                        name="brand"
+                        class="form-control"
+                        placeholder="Ví dụ: ASUS, MSI, Logitech..."
+                        required>
+
+                </div>
+
+                <!-- STOCK -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Số lượng trong kho
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock"
+                        class="form-control"
+                        placeholder="Ví dụ: 50"
+                        required>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Mô tả sản phẩm
+                    </label>
+
+                    <textarea
+                        name="description"
+                        class="form-control"
+                        rows="5"
+                        placeholder="Nhập mô tả sản phẩm..."
+                        required></textarea>
+
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-bold">
+                        Danh mục
+                    </label>
+
+                    <select
+                        name="category_id"
+                        class="form-select"
+                        required>
+
+                        <option value="">
+                            -- Chọn danh mục --
+                        </option>
+
+                        <option value="1">
+                            Laptop Gaming & Văn Phòng
+                        </option>
+
+                        <option value="2">
+                            Linh Kiện PC (VGA, CPU, RAM)
+                        </option>
+
+                        <option value="3">
+                            Phụ Kiện Chuột, Bàn Phím
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Đóng
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-success fw-bold">
+
+                    <i class="bi bi-plus-circle-fill"></i>
+                    Thêm vào kho
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

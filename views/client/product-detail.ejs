@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title><%= product.PRODUCT_NAME %> - PC STORE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .thumbnail { cursor: pointer; opacity: 0.6; transition: 0.3s; height: 80px; object-fit: cover; }
+        .thumbnail:hover, .thumbnail.active { opacity: 1; border: 2px solid #0d6efd; }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 shadow-sm">
+        <div class="container"><a class="navbar-brand text-warning fw-bold" href="/"><i class="bi bi-cpu-fill me-2"></i> PC STORE</a></div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="card border-0 shadow-sm p-4 p-md-5 rounded-3 bg-white">
+            <a href="/" class="btn btn-outline-secondary btn-sm mb-4 d-inline-block" style="width: max-content;"><i class="bi bi-arrow-left"></i> Về trang chủ</a>
+            <div class="row g-5">
+                <div class="col-md-6">
+                    <img id="mainImage" src="<%= product.IMAGE || product.image || 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600' %>" class="img-fluid rounded-3 shadow-sm w-100 mb-3" style="max-height: 450px; object-fit: cover;">
+                    
+                    <div class="row g-2">
+                        <% 
+                            // Giả lập thư viện ảnh (Nếu sau này bạn có cột EXTRA_IMAGES trong DB thì dùng)
+                            let imgList = [product.IMAGE, product.IMAGE, product.IMAGE]; 
+                        %>
+                        <% imgList.forEach((img, index) => { %>
+                            <div class="col-4">
+                                <img src="<%= img || 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600' %>" class="img-fluid rounded thumbnail <%= index === 0 ? 'active' : '' %>" onclick="changeImage(this, this.src)">
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <div class="col-md-6 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="badge bg-primary px-3 py-2 mb-2"><%= product.BRAND %></span>
+                        <h1 class="fw-bold text-dark mb-3"><%= product.PRODUCT_NAME %></h1>
+                        <h2 class="text-danger fw-bold mb-4"><%= product.PRICE.toLocaleString('vi-VN') %> đ</h2>
+                        <hr>
+                        <h5 class="fw-bold text-secondary mb-2">Thông số chi tiết:</h5>
+                        <p class="text-muted" style="white-space: pre-line; line-height: 1.6;"><%= product.DESCRIPTION || product.description || 'Đang cập nhật thông tin...' %></p>
+                    </div>
+                    
+                    <form action="/cart/add" method="POST" class="mt-4">
+                        <input type="hidden" name="productId" value="<%= product.ID %>">
+                        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold text-uppercase py-3 shadow"><i class="bi bi-cart-plus-fill me-2"></i> Thêm vào giỏ hàng ngay</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeImage(element, src) {
+            document.getElementById('mainImage').src = src;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>

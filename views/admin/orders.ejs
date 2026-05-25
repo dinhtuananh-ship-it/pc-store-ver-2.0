@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Hàng - PC STORE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+    <div class="d-flex">
+        <div class="bg-dark text-white p-3 d-flex flex-column justify-content-between" style="min-width: 260px; max-width: 260px; min-height: 100vh;">
+            <div>
+                <h4 class="text-warning fw-bold text-center my-3"><i class="bi bi-cpu-fill"></i> PC STORE ADMIN</h4>
+                <hr class="border-secondary">
+                <ul class="nav nav-pills flex-column gap-2">
+                    <li class="nav-item"><a href="/admin/dashboard" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Thống kê doanh thu</a></li>
+                    <li class="nav-item"><a href="/admin/products" class="nav-link text-white"><i class="bi bi-box-seam me-2"></i> Quản lý sản phẩm</a></li>
+                    <li class="nav-item"><a href="/admin/users" class="nav-link text-white"><i class="bi bi-people me-2"></i> Quản lý tài khoản</a></li>
+                    <li class="nav-item"><a href="/admin/orders" class="nav-link text-white active bg-primary"><i class="bi bi-cart3 me-2"></i> Quản lý đơn hàng</a></li>
+                    <li class="nav-item"><a href="/admin/posts" class="nav-link text-white"><i class="bi bi-newspaper me-2"></i> Quản lý bài viết</a></li>
+                </ul>
+            </div>
+            <div><hr class="border-secondary"><a href="/logout" class="btn btn-danger w-100 fw-bold py-2"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a></div>
+        </div>
+        <div class="flex-grow-1 p-4">
+            <h3 class="fw-bold mb-4 text-dark"><i class="bi bi-cart3 text-primary"></i> Quản Lý Đơn Hàng</h3>
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-0">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-3">Mã ĐH</th>
+                                <th>Người nhận</th>
+                                <th>Số điện thoại</th>
+                                <th>Tổng tiền</th>
+                                <th style="width: 240px;">Cập nhật trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(order => { %>
+                                <% let currentStatus = order.TRANG_THAI || order.trang_thai; %>
+                                <tr>
+                                    <td class="ps-3 fw-bold">#<%= order.ID || order.id %></td>
+                                    <td><%= order.HOTEN_NGUOI_NHAN || order.hoten_nguoi_nhan %></td>
+                                    <td><%= order.SDT_NGUOI_NHAN || order.sdt_nguoi_nhan %></td>
+                                    <td class="text-danger fw-bold"><%= (order.TONG_TIEN || order.tong_tien).toLocaleString('vi-VN') %> đ</td>
+                                    <td>
+                                        <form action="/admin/orders/update-status/<%= order.ID || order.id %>" method="POST" class="d-flex gap-1 align-items-center">
+                                            <select name="status" class="form-select form-select-sm fw-bold">
+                                                <option value="Chờ xác nhận" <%= currentStatus === 'Chờ xác nhận' ? 'selected' : '' %>>Chờ xác nhận</option>
+                                                <option value="Đang giao" <%= currentStatus === 'Đang giao' ? 'selected' : '' %>>Đang giao</option>
+                                                <option value="Hoàn thành" <%= currentStatus === 'Hoàn thành' ? 'selected' : '' %>>Hoàn thành</option>
+                                                <option value="Đã hủy" <%= currentStatus === 'Đã hủy' ? 'selected' : '' %>>Đã hủy</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-floppy-fill"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
